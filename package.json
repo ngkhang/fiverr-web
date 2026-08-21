@@ -25,10 +25,16 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:all": "pnpm lint && pnpm format:check",
-    "fix:all": "pnpm lint:fix && pnpm format"
+    "check:all": "pnpm lint && pnpm format:check && pnpm typecheck",
+    "fix:all": "pnpm lint:fix && pnpm format",
+    "typecheck": "tsc --pretty --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.0",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
@@ -46,5 +52,14 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@11.10.0"
+  "packageManager": "pnpm@11.10.0",
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  }
 }

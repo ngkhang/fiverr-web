@@ -1,0 +1,9 @@
+pnpm exec commitlint --edit "$1" || exit 1
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+KEY=$(echo "$BRANCH" | grep -oE 'FVRW-[0-9]+')
+
+if [ -n "$KEY" ] && ! grep -q "Refs: $KEY" "$1"; then
+  echo "" >> "$1"
+  echo "Refs: $KEY" >> "$1"
+fi
