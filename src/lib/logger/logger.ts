@@ -1,3 +1,4 @@
+import { logLevelSchema } from '@/schemas/log-level.schema';
 import { LoggerOptions, LogLevel, LogPayload, Transport } from './logger.type';
 
 // TODO: Add validate environment variables
@@ -78,9 +79,22 @@ export const createLogger = (options: LoggerOptions) => {
 
 export type Logger = ReturnType<typeof createLogger>;
 
-const configuredLevel = isServer
-  ? (process.env.APP_LOG_LEVEL as LogLevel)
-  : (process.env.NEXT_PUBLIC_LOG_LEVEL as LogLevel);
+const resolveConfiguredLevel = (): LogLevel | undefined => {
+  const raw = isServer ? process.env.APP_LOG_LEVEL : process.env.NEXT_PUBLIC_LOG_LEVEL;
+
+  if (!raw) return undefined;
+
+  const parsed = logLevelSchema.safeParse(raw);
+
+  if (!parsed.success) {
+    console.warn(`Invalid log level "${raw}", falling back to default.`);
+    return undefined;
+  }
+
+  return parsed.data;
+};
+
+const configuredLevel = resolveConfiguredLevel();
 
 export const logger = createLogger({
   minLevel: configuredLevel ?? (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
