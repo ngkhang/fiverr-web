@@ -1,11 +1,12 @@
+import { serverEnv } from '@/config/env-server.config';
 import axios from 'axios';
 
 export const axiosServer = axios.create({
-  baseURL: process.env.ACADEMY_API_BASE_URL,
+  baseURL: serverEnv.ACADEMY_API_BASE_URL,
   timeout: 15_000,
   headers: {
     'Content-Type': 'application/json',
-    tokenCybersoft: process.env.ACADEMY_TOKEN,
+    tokenCybersoft: serverEnv.ACADEMY_TOKEN,
   },
 });
 

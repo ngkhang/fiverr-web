@@ -1,13 +1,12 @@
+import { clientEnv } from '@/config/env-client.config';
 import { ApiErrorResponse } from '@/types/api.type';
 import axios, { AxiosError, isAxiosError } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 
-const timeOutEnv = process.env.NEXT_PUBLIC_API_TIMEOUT;
-
 // Creating browser-side axios instance
 export const axiosClient = axios.create({
   baseURL: '/api',
-  timeout: timeOutEnv && typeof timeOutEnv === 'number' ? timeOutEnv : 15_000,
+  timeout: clientEnv.NEXT_PUBLIC_API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
